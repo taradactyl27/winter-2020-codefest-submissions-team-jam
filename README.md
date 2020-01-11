@@ -5,7 +5,7 @@
 ### Team members (format: GitHub username, last name, first name):
 - wongjessica, Wong, Jessica
 - EdMaxPrime, Zlotskiy, Max
-- 
+- taradactyl27, Taradachuk, Alex
 -
 - 
 - 
