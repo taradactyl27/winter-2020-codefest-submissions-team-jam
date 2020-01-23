@@ -1,0 +1,7 @@
+{
+  "name": "Spell.it",
+  "description": "Spelling game to improve kids' spelling and memory",
+  "repository": "https://github.com/hunter-classes/winter-2020-codefest-submissions-team-jam.git",
+  "logo": "",
+  "keywords": ["python", "flask"]
+}
