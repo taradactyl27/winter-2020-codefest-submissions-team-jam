@@ -1,5 +1,12 @@
 # Hunter CS Winter 2019 CodeFest
 
+# Running Flask
+- run "source env/bin/activate" to start virtual environment
+- in root project folder, run "pip install -r "requirements.text""
+- go to app folder
+- run "flask run"
+- if you get a flask app name error run "export FLASK_APP=app.py"
+
 # Team Info
 ### Team name: Team JAM
 ### Team members (format: GitHub username, last name, first name):
