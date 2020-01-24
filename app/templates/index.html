@@ -28,7 +28,7 @@
     <object type="image/svg+xml" data="static/img/hexagon.svg" id="hex"></object>
 </div>
 <div id="game_area">
-    <p id="answer">_ _ _ _ _ _</p>
+    <object type="image/svg+xml" data="static/img/flashcard.svg" id="card"></object>
 </div>
 <script type="text/javascript">
     function setup(){
@@ -91,14 +91,14 @@
     }
     function addLetter(obj) {
             var letter = obj.getElementById("text").textContent;
-            var guess = document.getElementById("answer").textContent;
+            var guess = document.getElementById("card").contentDocument.getElementById("text").textContent;
             console.log(letter);
             for (var j = 0; j < guess.length; j++){
                 if (guess[j] == '_'){
                     guess = setCharAt(guess,j,letter);
-                    document.getElementById("answer").textContent = guess;
+                    document.getElementById("card").contentDocument.getElementById("text").textContent = guess;
                     if (j == guess.length-1){
-                        document.getElementById("answer").textContent = "_ _ _ _ _ _";
+                        document.getElementById("card").contentDocument.getElementById("text").textContent = "_ _ _ _ _ _";
                     }
                     break;
                 }

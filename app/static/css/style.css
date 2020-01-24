@@ -68,3 +68,11 @@ svg:hover > .cls-1 {
 svg:hover{
   cursor:pointer;
 }
+
+#card{
+  width: 1100px;
+  height: auto;
+  position: absolute;
+  margin-left: -548px;
+  margin-top: 0px;
+}
