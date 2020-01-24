@@ -44,3 +44,18 @@ nav ul li a:hover{
   text-decoration: none;
   color: rgb(231, 182, 19);
 }
+
+object{
+  width: 100px;
+    margin-left: 165px;
+    margin-top: 127px;
+    position:absolute;
+}
+
+svg:hover > .cls-1 {
+  fill: rgb(247, 250, 80);
+}
+
+svg:hover{
+  cursor:pointer;
+}
