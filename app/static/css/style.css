@@ -6,12 +6,21 @@ body{
   
 }
 #game_area{
-  height: 50%;
-  width: 70%;
+  height: 533px;
+  position: absolute;
+  width: 1122px;
   background: #FFF;
-  align: center;
-  margin-top: 122px;
+  margin-left: 647px;
+  margin-top: 77px;
+  line-height: 533px;
+  text-align: center;
 }
+
+#answer{
+  font-size: 128px;
+  font-weight: bold;
+}
+
 #logo{
     content: url(spell.png);
     width: 30em;

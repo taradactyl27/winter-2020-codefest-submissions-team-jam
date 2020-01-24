@@ -27,6 +27,9 @@
     <object type="image/svg+xml" data="static/img/hexagon.svg" id="hex"></object>
     <object type="image/svg+xml" data="static/img/hexagon.svg" id="hex"></object>
 </div>
+<div id="game_area">
+    <p id="answer">_ _ _ _ _ _</p>
+</div>
 <script type="text/javascript">
     function setup(){
         var i = document.getElementById("letter_input").childNodes;
@@ -81,8 +84,27 @@
         i[47].contentDocument.getElementById("text").textContent='T';
         i[49].style.transform='translate(284px,328px)';
         i[49].contentDocument.getElementById("text").textContent='Y';
-        
     }
+    function setCharAt(str,index,chr) {
+        if(index > str.length-1) return str;
+        return str.substr(0,index) + chr + str.substr(index+1);
+    }
+    function addLetter(obj) {
+            var letter = obj.getElementById("text").textContent;
+            var guess = document.getElementById("answer").textContent;
+            console.log(letter);
+            for (var j = 0; j < guess.length; j++){
+                if (guess[j] == '_'){
+                    guess = setCharAt(guess,j,letter);
+                    document.getElementById("answer").textContent = guess;
+                    if (j == guess.length-1){
+                        document.getElementById("answer").textContent = "_ _ _ _ _ _";
+                    }
+                    break;
+                }
+            }
+        }
     window.onload = setup;
 </script>
+
 {% endblock %}
