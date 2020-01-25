@@ -1,6 +1,5 @@
 function setup(){
     var i = document.getElementById("letter_input").childNodes;
-    console.log('running');
     i[1].style.transform='translateY(82px)';
     i[1].contentDocument.getElementById("text").textContent='F';
     i[3].style.transform='translateY(164px)';
@@ -65,12 +64,12 @@ function addLetter(obj) {
                 guess = setCharAt(guess,j,letter);
                 document.getElementById("card").contentDocument.getElementById("text").textContent = guess;
                 if (j == guess.length-1){
-                    if(guess == "B E A U T Y"){
+                    if(guess == "BEAUTY"){
                         alert("That's Right!");
                         //run correct word animation and flip to show definition
                     }
                     else{
-                        document.getElementById("card").contentDocument.getElementById("text").textContent = "_ _ _ _ _ _";
+                        document.getElementById("card").contentDocument.getElementById("text").textContent = "______";
                         //wrong answer, reset the card and show option to give up
                     }
                 }
