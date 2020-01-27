@@ -1,3 +1,13 @@
+var gameState = {
+    word: "",
+    input: ""
+};
+
+/**
+ * This sets up the honeycomb hexagons with letters. It should be run once when
+ * the document is loaded. Each letter is given the appropriate offset from the 
+ * rest of the grid.
+ */
 function setup(){
     var i = document.getElementById("letter_input").childNodes;
     i[1].style.transform='translateY(82px)';
@@ -51,32 +61,72 @@ function setup(){
     i[49].style.transform='translate(284px,328px)';
     i[49].contentDocument.getElementById("text").textContent='Y';
 }
+
+/**
+ * This is a polyfill for the java-style setCharAt(int index) method of strings
+ * which has no convenient equivalent in javascript. It will return a new
+ * string with 1 character replaced if all the parameters are appropriate.
+ * @param str    (string) the string to be edited
+ * @param index  (int) the index of the character in the string to be replaced
+ * @param chr    (string) the character to put in the specified index
+ * @return       (string) new string with replacement or the same one if
+ *               the index was out of bounds
+ */
 function setCharAt(str,index,chr) {
     if(index > str.length-1) return str;
     return str.substr(0,index) + chr + str.substr(index+1);
 }
+
+/**
+ * Dynamically makes an SVG element.
+ * @param tag  (string) the name of the svg tag
+ * @param attributes  (object) key-value pairs for attributes
+ * @param content     [optional] if this is a string, then it will become
+ *                    the text content of this svg element. If it is an
+ *                    svg element, then it will be appended to this one.
+ */
+function makeSVG(tag, attributes, content) {
+    var node = document.createElementNS('http://www.w3.org/2000/svg', tag);
+    for(var k in attributes) {
+        node.setAttribute(k, attributes[k]);
+    }
+    if(typeof content === "string") {
+        tag.textContent = content;
+    } 
+    else if(typeof content != "undefined") {
+        tag.appendChild(content);
+    }
+    return node;
+}
+
+/** */
 function addLetter(obj) {
-        var letter = obj.getElementById("text").textContent;
-        var guess = document.getElementById("card").contentDocument.getElementById("text").textContent;
-        console.log(letter);
-        for (var j = 0; j < guess.length; j++){
-            if (guess[j] == '_'){
-                guess = setCharAt(guess,j,letter);
-                document.getElementById("card").contentDocument.getElementById("text").textContent = guess;
-                if (j == guess.length-1){
-                    if(guess == "BEAUTY"){
-                        alert("That's Right!");
-                        //run correct word animation and flip to show definition
-                    }
-                    else{
-                        document.getElementById("card").contentDocument.getElementById("text").textContent = "______";
-                        //wrong answer, reset the card and show option to give up
-                    }
+    var letter = obj.getElementById("text").textContent;
+    var guess = document.getElementById("card").contentDocument.getElementById("text").textContent;
+    console.log(letter);
+    for (var j = 0; j < guess.length; j++){
+        if (guess[j] == '_'){
+            guess = setCharAt(guess,j,letter);
+            document.getElementById("card").contentDocument.getElementById("text").textContent = guess;
+            if (j == guess.length-1){
+                if(guess == "BEAUTY"){
+                    alert("That's Right!");
+                    //run correct word animation and flip to show definition
                 }
-                break;
+                else{
+                    document.getElementById("card").contentDocument.getElementById("text").textContent = "______";
+                    //wrong answer, reset the card and show option to give up
+                }
             }
+            break;
         }
     }
+}
+
+/**
+ * This is invoked when the speaker icon is clicked. It asks the browser to
+ * speak aloud the current word. See img/speaker.svg
+ */
 function textToSpeech() {
     var available_voices = window.speechSynthesis.getVoices();
     var eng_voice = '';
