@@ -2,7 +2,7 @@ body{
 
   background: url("honeycomb.svg") no-repeat;
   background-size: cover;
-  height: 1080px;
+  height: 1080px
   
 }
 #game_area{
@@ -23,10 +23,9 @@ body{
 
 #logo{
     content: url(spell.png);
-    width: 30em;
-    height: 30em;
-    margin-top: -145px;
-    margin-left: 107px;
+    width: auto;
+    height: 12em;
+    left: 13em;
     position: absolute;
 }
 nav{
@@ -37,6 +36,7 @@ nav ul{
     margin-left: 705px;
     padding-top: 63px;
     position: absolute;
+    width:1080px;
 }
 nav ul li{
   float:right;
@@ -79,4 +79,8 @@ svg:hover{
 #speech{
   margin-top: 30px;
   margin-left: 370px;
+}
+
+*, ::after, ::before {
+  box-sizing: inherit !important;
 }

@@ -1,0 +1,12 @@
+{% extends "layout.html" %} {% block header %}
+<script type="text/javascript">
+ function changeBg(){
+    document.getElementsByTagName('body')[0].style.backgroundImage = "url(static/img/honeycombP.svg)";
+  }
+  window.onload = changeBg;
+ console.log("ran")
+ </script>
+<div id=profile>
+
+</div>
+{% endblock %}
