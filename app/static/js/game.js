@@ -105,9 +105,14 @@ class Review {
             []
         ];
         this.input = "";
-        this.word = 0;
-        this.stage = PRACTICE;
-        this.cycleStop = PRACTICE;
+        this.word = 0;              /*The index of the current word within the
+                                      current stage */
+        this.stage = PRACTICE;      /*The index of the current stage (which has
+                                      many words in it) */
+        this.cycleStop = PRACTICE+1;/*The last stage to do in this loop. Each
+                                      time the spatial learning algorithm is
+                                      applied, this boundary increases until
+                                      it wraps around to the beginning. */
     }
     /**
      * A constant getter function that retrieves the currently "displayed" word
@@ -155,10 +160,48 @@ class Review {
         return this.peekWord().toLowerCase() == this.input.toLowerCase();
     }
     spatialLearning() {
-        //
+        //loop through each stage that was just completed
+        for(let s = PRACTICE; s <= this.cycleStop; s++) {
+            let w = 0;
+            //loop through each word in this stage
+            while(w < this.stages[s].length) {
+                /*if correct spelling and word is not mastered, move it up to
+                  next level of memorization (less frequent repetition) */
+                if(this.stages[s][w].correct && s != LEARNED) {
+                    this.stages[s+1].push(this.stages[s].splice(w, 1));
+                }
+                /*if incorrect spelling and word is not already in lowest 
+                  level of memorization, move it to lowest level of memorization 
+                  (most frequent repetition) */
+                else if(this.stages[s][w].correct == false && s != PRACTICE) {
+                    this.stages[PRACTICE].push(this.stages[s].splice(w, 1));
+                }
+                /*if the word wasn't moved, process the next one*/
+                else {
+                    w++;
+                }
+            }
+        }
     }
+    /**
+     * Advances internal pointers to the next word. Sometimes, the spatial
+     * learning algorithm is applied to reorder the words in a way to enhance
+     * memorization. This is managed internally by "stages of memorization."
+     */
     nextWord() {
-        //
+        this.word++;
+        if(this.word == this.stages[this.stage].length) {
+            this.stage++;
+            this.word = 0;
+        }
+        if(this.stage == this.cycleStop) {
+            spatialLearning();
+            this.cycleStop++;
+            this.stage = PRACTICE;
+        }
+        if(this.cycleStop == this.stages.length) {
+            this.cycleStop = PRACTICE;
+        }
     }
     /**
      * Returns true if every word was spelled correctly enough times, false otherwise.
