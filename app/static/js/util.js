@@ -58,3 +58,18 @@ function makeSVG(tag, attributes, content) {
     }
     return node;
 }
+
+/**
+ * Displays text in the main flashcard. If one argument is provided, then this
+ * just replaces the old text with the new one. If two arguments are
+ * provided, an index and a character, then the setCharAt() function is called
+ * on the old text.
+ */
+function displayFlashcard(text) {
+    var card = document.getElementById("card").contentDocument.getElementById("text");
+    if(arguments.length == 1) {
+        card.textContent = text;
+    } else {
+        card.textContent = setCharAt(card.textContent, arguments[0], arguments[1]);
+    }
+}
