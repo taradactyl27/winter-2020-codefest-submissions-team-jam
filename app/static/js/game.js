@@ -15,6 +15,8 @@ function fetchWords() {
         //in reality, this would come from the API in a callback
         var data = ["hello", "friend", "pencil", "car", "apple", "thinking", "thought", "music", "magical"];
         game = new Review(data);
+        displayFlashcard(game.peekWord().replace(/./g, "_"));
+        console.log(game.peekWord())
     }, 1000);
 }
 
@@ -93,7 +95,7 @@ class Review {
         }
         //setup the spacial repetition stages
         this.stages = [
-            gameState.words.map(function(arrayElement, index) {
+            this.words.map(function(arrayElement, index) {
                 return {
                     word: arrayElement,
                     correct: false
@@ -144,7 +146,7 @@ class Review {
      * Returns the length of the current user input
      */
     lenInput() {
-        return this.input.length();
+        return this.input.length;
     }
     /**
      * Returns true if the spelling of current word is correct, false if not.
@@ -172,10 +174,8 @@ var game;
 /** */
 function addLetter(obj) {
     var letter = obj.getElementById("text").textContent;
-    var card = document.getElementById("card").contentDocument.getElementById("text");
-    console.log(letter);
     //show the new letter in the spelling
-    card.textContent = setCharAt(card.textContent, game.lenInput(), letter);
+    displayFlashcard(game.lenInput(), letter);
     //check if the spelling is correct
     if(game.addInput(letter)) {
         //correct
@@ -183,7 +183,7 @@ function addLetter(obj) {
     }
     else {
         //not done yet...
-        if(game.lenInput() == game.peekWord().length()) {
+        if(game.lenInput() == game.peekWord().length) {
             //wrong spelling
             alert("You got it wrong");
         }
