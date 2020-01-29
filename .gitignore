@@ -1,1 +1,5 @@
 .pyc
+
+app/__pycache__
+
+requirements.txt
