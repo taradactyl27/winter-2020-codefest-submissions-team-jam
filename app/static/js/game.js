@@ -141,6 +141,12 @@ class Review {
         return this.setInput(this.input + letter);
     }
     /**
+     * Returns the length of the current user input
+     */
+    lenInput() {
+        return this.input.length();
+    }
+    /**
      * Returns true if the spelling of current word is correct, false if not.
      */
     checkSpelling() {
@@ -166,23 +172,20 @@ var game;
 /** */
 function addLetter(obj) {
     var letter = obj.getElementById("text").textContent;
-    var guess = document.getElementById("card").contentDocument.getElementById("text").textContent;
+    var card = document.getElementById("card").contentDocument.getElementById("text");
     console.log(letter);
-    for (var j = 0; j < guess.length; j++){
-        if (guess[j] == '_'){
-            guess = setCharAt(guess,j,letter);
-            document.getElementById("card").contentDocument.getElementById("text").textContent = guess;
-            if (j == guess.length-1){
-                if(guess == "BEAUTY"){
-                    alert("That's Right!");
-                    //run correct word animation and flip to show definition
-                }
-                else{
-                    document.getElementById("card").contentDocument.getElementById("text").textContent = "______";
-                    //wrong answer, reset the card and show option to give up
-                }
-            }
-            break;
+    //show the new letter in the spelling
+    card.textContent = setCharAt(card.textContent, game.lenInput(), letter);
+    //check if the spelling is correct
+    if(game.addInput(letter)) {
+        //correct
+        alert("That's right!");
+    }
+    else {
+        //not done yet...
+        if(game.lenInput() == game.peekWord().length()) {
+            //wrong spelling
+            alert("You got it wrong");
         }
     }
 }
