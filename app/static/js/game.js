@@ -1,7 +1,36 @@
 var gameState = {
-    word: "",
-    input: ""
+    input: "",
+    words: [],
+    stage: 0,
+    word: 0,
+    stages: [],
 };
+
+const LEARNED = 2;
+const ALMOST_OK = 1;
+const PRACTICE = 0;
+
+/**
+ * Makes an ajax request to get the list of words. This function works
+ * asynchronously, so the state should be setup after it completes.
+ */
+function fetchWords() {
+    window.setTimeout(function() {
+        //in reality, this would come from the API in a callback
+        var data = ["hello", "friend", "pencil", "car", "apple", "thinking", "thought", "music", "magical"];
+    }, 1000);
+}
+
+function restart() {
+    //suffle the words
+    for(let i = 0; i < gameState.words.length; i++) {
+        let temp = gameState.words[i];
+        let i2 = parseInt(Math.random() * gameState.words.length)
+        gameState.words[i] = gameState.words[i2];
+        gameState.words[i2] = temp;
+    }
+    //setup the spacial repetition stages
+}
 
 /**
  * This sets up the honeycomb hexagons with letters. It should be run once when
@@ -60,43 +89,7 @@ function setup(){
     i[47].contentDocument.getElementById("text").textContent='T';
     i[49].style.transform='translate(284px,328px)';
     i[49].contentDocument.getElementById("text").textContent='Y';
-}
-
-/**
- * This is a polyfill for the java-style setCharAt(int index) method of strings
- * which has no convenient equivalent in javascript. It will return a new
- * string with 1 character replaced if all the parameters are appropriate.
- * @param str    (string) the string to be edited
- * @param index  (int) the index of the character in the string to be replaced
- * @param chr    (string) the character to put in the specified index
- * @return       (string) new string with replacement or the same one if
- *               the index was out of bounds
- */
-function setCharAt(str,index,chr) {
-    if(index > str.length-1) return str;
-    return str.substr(0,index) + chr + str.substr(index+1);
-}
-
-/**
- * Dynamically makes an SVG element.
- * @param tag  (string) the name of the svg tag
- * @param attributes  (object) key-value pairs for attributes
- * @param content     [optional] if this is a string, then it will become
- *                    the text content of this svg element. If it is an
- *                    svg element, then it will be appended to this one.
- */
-function makeSVG(tag, attributes, content) {
-    var node = document.createElementNS('http://www.w3.org/2000/svg', tag);
-    for(var k in attributes) {
-        node.setAttribute(k, attributes[k]);
-    }
-    if(typeof content === "string") {
-        tag.textContent = content;
-    } 
-    else if(typeof content != "undefined") {
-        tag.appendChild(content);
-    }
-    return node;
+    fetchWords();
 }
 
 /** */
@@ -121,28 +114,5 @@ function addLetter(obj) {
             break;
         }
     }
-}
-
-/**
- * This is invoked when the speaker icon is clicked. It asks the browser to
- * speak aloud the current word. See img/speaker.svg
- */
-function textToSpeech() {
-    var available_voices = window.speechSynthesis.getVoices();
-    var eng_voice = '';
-    for(var i=0; i<available_voices.length; i++) {
-        if(available_voices[i].lang === 'en-US') {
-            english_voice = available_voices[i];
-            break;
-        }
-    }
-    if(english_voice === '')
-        english_voice = available_voices[0];
-    var utter = new SpeechSynthesisUtterance();
-    utter.rate = 1;
-    utter.pitch = 0.5;
-    utter.text = 'Spell Beauty';
-    utter.voice = english_voice;
-    window.speechSynthesis.speak(utter);
 }
 window.onload = setup;
