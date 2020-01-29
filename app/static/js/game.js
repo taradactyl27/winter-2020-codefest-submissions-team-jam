@@ -16,7 +16,7 @@ function fetchWords() {
         var data = ["hello", "friend", "pencil", "car", "apple", "thinking", "thought", "music", "magical"];
         game = new Review(data);
         displayFlashcard(game.peekWord().replace(/./g, "_"));
-        console.log(game.peekWord())
+        console.log("Word is: ", game.peekWord());
     }, 1000);
 }
 
@@ -214,6 +214,25 @@ class Review {
 /* This global variable will be an instance of Review and control the state */
 var game;
 
+/**
+ * This global callback function should be used as a callback when animations
+ * are completed. It will ask the game for the next word and display blanks
+ * in the flashcard. If we ran out of words, then a "winner" message will be
+ * displayed and the player should be asked if they want a different set of
+ * words. The input will always be reset.
+ */
+function next() {
+    if(!game.done()) {
+        game.nextWord();
+        game.setInput("");
+        displayFlashcard(game.peekWord().replace(/./g, "_"));
+        console.log("Word is: ", game.peekWord());
+    }
+    else {
+        alert("Winner!");
+    }
+}
+
 /** */
 function addLetter(obj) {
     var letter = obj.getElementById("text").textContent;
@@ -223,12 +242,14 @@ function addLetter(obj) {
     if(game.addInput(letter)) {
         //correct
         alert("That's right!");
+        next();
     }
     else {
         //not done yet...
         if(game.lenInput() == game.peekWord().length) {
             //wrong spelling
             alert("You got it wrong");
+            next();
         }
     }
 }
