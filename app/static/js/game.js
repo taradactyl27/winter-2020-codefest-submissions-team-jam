@@ -13,7 +13,7 @@ const PRACTICE = 0;
 function fetchWords() {
     window.setTimeout(function() {
         //in reality, this would come from the API in a callback
-        var data = ["hello", "friend", "pencil", "car", "apple", "thinking", "thought", "music", "magical"];
+        var data = ["hello", "car", "apple", "music"];
         game = new Review(data);
         displayFlashcard(game.peekWord().replace(/./g, "_"));
         console.log("Word is: ", game.peekWord());
@@ -113,6 +113,16 @@ class Review {
                                       time the spatial learning algorithm is
                                       applied, this boundary increases until
                                       it wraps around to the beginning. */
+        this.numLearns = 0;         /*The number of times the spatial learning
+                                      algorithm was called. Used to keep track
+                                      of which words were processed by the
+                                      current iteration of the algorithm.
+                                      PRIVATE VARIABLE*/
+        //bind instance methods
+        this.peekWord = this.peekWord.bind(this);
+        this.setIsCorrect = this.setIsCorrect.bind(this);
+        this.setInput = this.setInput.bind(this);
+        this.spatialLearning = this.spatialLearning.bind(this);
     }
     /**
      * A constant getter function that retrieves the currently "displayed" word
@@ -157,6 +167,7 @@ class Review {
      * Returns true if the spelling of current word is correct, false if not.
      */
     checkSpelling() {
+        console.log(this.peekWord);
         return this.peekWord().toLowerCase() == this.input.toLowerCase();
     }
     spatialLearning() {
@@ -165,23 +176,33 @@ class Review {
             let w = 0;
             //loop through each word in this stage
             while(w < this.stages[s].length) {
-                /*if correct spelling and word is not mastered, move it up to
-                  next level of memorization (less frequent repetition) */
-                if(this.stages[s][w].correct && s != LEARNED) {
-                    this.stages[s+1].push(this.stages[s].splice(w, 1));
+                /*if this word hasn't been updated yet in this function call*/
+                if(this.stages[s][w].updated != this.numLearns) {
+                    this.stages[s][w].updated = this.numLearns;
+                    /*if correct spelling and word is not mastered, move it up to
+                      next level of memorization (less frequent repetition) */
+                    if(this.stages[s][w].correct && s != LEARNED) {
+                        this.stages[s+1].push(this.stages[s].splice(w, 1));
+                    }
+                    /*if incorrect spelling and word is not already in lowest 
+                      level of memorization, move it to lowest level of memorization 
+                      (most frequent repetition) */
+                    else if(this.stages[s][w].correct == false && s != PRACTICE) {
+                        this.stages[PRACTICE].push(this.stages[s].splice(w, 1));
+                    }
+                    /*if the word wasn't moved, process the next one*/
+                    else {
+                        w++;
+                    }
                 }
-                /*if incorrect spelling and word is not already in lowest 
-                  level of memorization, move it to lowest level of memorization 
-                  (most frequent repetition) */
-                else if(this.stages[s][w].correct == false && s != PRACTICE) {
-                    this.stages[PRACTICE].push(this.stages[s].splice(w, 1));
-                }
-                /*if the word wasn't moved, process the next one*/
                 else {
                     w++;
                 }
             }
         }
+        this.numLearns++;
+        console.log(`Stage ${this.stage}/${this.stages.length} and word ${this.word}/${this.stages[this.stage].length}`);
+        console.log("Practicing: " + this.stages[0].length + ", Mid: " + this.stages[1].length + ", Learned: " + this.stages[2].length);
     }
     /**
      * Advances internal pointers to the next word. Sometimes, the spatial
@@ -193,14 +214,20 @@ class Review {
         if(this.word == this.stages[this.stage].length) {
             this.stage++;
             this.word = 0;
-        }
-        if(this.stage == this.cycleStop) {
-            spatialLearning();
-            this.cycleStop++;
-            this.stage = PRACTICE;
-        }
-        if(this.cycleStop == this.stages.length) {
-            this.cycleStop = PRACTICE;
+            if(this.stage == this.cycleStop) {
+                this.spatialLearning();
+                this.cycleStop++;
+                //advance to first stage that has words in it (nonempty)
+                for(let s = PRACTICE; s < this.stages.length; s++) {
+                    if(this.stages[s].length > 0) {
+                        this.stage = s;
+                        break;
+                    }
+                }
+                if(this.cycleStop == this.stages.length) {
+                    this.cycleStop = PRACTICE;
+                }
+            }
         }
     }
     /**
@@ -230,6 +257,7 @@ function next() {
     }
     else {
         alert("Winner!");
+        //call fetchWords() here again to get new words
     }
 }
 
