@@ -77,6 +77,7 @@ function setup(){
     i[47].contentDocument.getElementById("text").textContent='T';
     i[49].style.transform='translate(284px,328px)';
     i[49].contentDocument.getElementById("text").textContent='Y';
+    //displayMessage(); //hide popup
     fetchWords();
 }
 window.onload = setup;
@@ -269,6 +270,9 @@ function addLetter(obj) {
     //check if the spelling is correct
     if(game.addInput(letter)) {
         //correct
+        // displayMessage("That's right! Click to go to the next word.", function() {
+        //     next();
+        // });
         alert("That's right!");
         next();
     }
@@ -280,4 +284,11 @@ function addLetter(obj) {
             next();
         }
     }
+}
+
+/**
+ * Event listener for speaker icon. Says "Spell" + word
+ */
+function pronounce() {
+    textToSpeech(game.peekWord());
 }

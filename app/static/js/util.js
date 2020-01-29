@@ -73,3 +73,18 @@ function displayFlashcard(text) {
         card.textContent = setCharAt(card.textContent, arguments[0], arguments[1]);
     }
 }
+
+/**
+ * Meant to display big text popup covering the whole screen.
+ */
+function displayMessage(text, onClick) {
+    var popup = $("#popup");
+    if(text == false) {
+        popup.css({display: "none"});
+    } else {
+        popup.off();
+        popup.on("click", onClick);
+        popup.html(text);
+        popup.css({display: "block"});
+    }
+}

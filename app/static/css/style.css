@@ -84,3 +84,14 @@ svg:hover{
 *, ::after, ::before {
   box-sizing: inherit !important;
 }
+
+.fullscreen {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  font-size: 3em;
+  text-align: center; /* align text horizontally */
+  line-height: 100vh; /* align text vertically */
+}
