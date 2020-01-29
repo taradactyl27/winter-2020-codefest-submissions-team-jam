@@ -1,14 +1,10 @@
-var gameState = {
-    input: "",
-    words: [],
-    stage: 0,
-    word: 0,
-    stages: [],
-};
+/********************************* CONSTANTS *********************************/
 
 const LEARNED = 2;
 const ALMOST_OK = 1;
 const PRACTICE = 0;
+
+/********************************* ASYNC *********************************/
 
 /**
  * Makes an ajax request to get the list of words. This function works
@@ -18,18 +14,8 @@ function fetchWords() {
     window.setTimeout(function() {
         //in reality, this would come from the API in a callback
         var data = ["hello", "friend", "pencil", "car", "apple", "thinking", "thought", "music", "magical"];
+        game = new Review(data);
     }, 1000);
-}
-
-function restart() {
-    //suffle the words
-    for(let i = 0; i < gameState.words.length; i++) {
-        let temp = gameState.words[i];
-        let i2 = parseInt(Math.random() * gameState.words.length)
-        gameState.words[i] = gameState.words[i2];
-        gameState.words[i2] = temp;
-    }
-    //setup the spacial repetition stages
 }
 
 /**
@@ -91,6 +77,91 @@ function setup(){
     i[49].contentDocument.getElementById("text").textContent='Y';
     fetchWords();
 }
+window.onload = setup;
+
+/********************************* GAME STATE ********************************/
+
+class Review {
+    constructor(words) {
+        this.words = words;
+        //suffle the words
+        for(let i = 0; i < this.words.length; i++) {
+            let temp = this.words[i];
+            let i2 = parseInt(Math.random() * this.words.length)
+            this.words[i] = this.words[i2];
+            this.words[i2] = temp;
+        }
+        //setup the spacial repetition stages
+        this.stages = [
+            gameState.words.map(function(arrayElement, index) {
+                return {
+                    word: arrayElement,
+                    correct: false
+                };
+            }),
+            [],
+            []
+        ];
+        this.input = "";
+        this.word = 0;
+        this.stage = PRACTICE;
+        this.cycleStop = PRACTICE;
+    }
+    /**
+     * A constant getter function that retrieves the currently "displayed" word
+     * @return (string) the current word
+     */
+    peekWord() {
+        return this.stages[this.stage][this.word].word;
+    }
+    /**
+     * Marks the current spelling of the current word as correct or incorrect.
+     * @param status (string) true if the word should be correct, false otherwise
+     */
+    setIsCorrect(status) {
+        this.stages[this.stage][this.word].correct = status;
+    }
+    /**
+     * Sets the spelling to the provided string. Should come from user input.
+     * This method also records whether the current spelling is correct or
+     * not.
+     * @param str  (string) the input to replace the old one
+     * @return     (boolean) see checkSpelling()
+     */
+    setInput(str) {
+        this.input = str;
+        var correct = this.checkSpelling();
+        this.setIsCorrect(correct);
+        return correct;
+    }
+    /**
+     * Same as above, but appends instead of replacing the input.
+     */
+    addInput(letter) {
+        return this.setInput(this.input + letter);
+    }
+    /**
+     * Returns true if the spelling of current word is correct, false if not.
+     */
+    checkSpelling() {
+        return this.peekWord() == this.input;
+    }
+    spatialLearning() {
+        //
+    }
+    nextWord() {
+        //
+    }
+    /**
+     * Returns true if every word was spelled correctly enough times, false otherwise.
+     */
+    done() {
+        return (this.stage == this.cycleStop) && (this.stages[LEARNED].length == this.words.length);
+    }
+}
+
+/* This global variable will be an instance of Review and control the state */
+var game;
 
 /** */
 function addLetter(obj) {
@@ -115,4 +186,3 @@ function addLetter(obj) {
         }
     }
 }
-window.onload = setup;
