@@ -152,7 +152,7 @@ class Review {
      * Returns true if the spelling of current word is correct, false if not.
      */
     checkSpelling() {
-        return this.peekWord() == this.input;
+        return this.peekWord().toLowerCase() == this.input.toLowerCase();
     }
     spatialLearning() {
         //
