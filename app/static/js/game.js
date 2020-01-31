@@ -77,6 +77,9 @@ function setup(){
     i[47].contentDocument.getElementById("text").textContent='T';
     i[49].style.transform='translate(284px,328px)';
     i[49].contentDocument.getElementById("text").textContent='Y';
+    i[51].style.transform='translate(284px,492px)';
+    i[51].contentDocument.getElementById("text").textContent='<';
+
     //displayMessage(); //hide popup
     fetchWords();
 }
@@ -227,10 +230,16 @@ class Review {
     }
 
     /**
-     * Same as above, but appends instead of replacing the input.
+     * Appends instead of replacing the input.
      */
     addInput(letter) {
         return this.setInput(this.input + letter);
+    }
+    /**
+     * Remove last given character
+     */
+    removeLetter(){
+        this.setInput(this.input.substring(0,this.input.length-1));
     }
     /**
      * Returns the length of the current user input
@@ -342,23 +351,29 @@ function next() {
 /** */
 function addLetter(obj) {
     var letter = obj.getElementById("text").textContent;
-    //show the new letter in the spelling
-    displayFlashcard(game.lenInput(), letter);
     //check if the spelling is correct
-    if(game.addInput(letter)) {
-        //correct
-        // displayMessage("That's right! Click to go to the next word.", function() {
-        //     next();
-        // });
-        game.animateC();
-        setTimeout(next, 3000);
+    if(letter=="<"){
+        game.removeLetter();
+        displayFlashcard(game.lenInput(),"_");
     }
-    else {
-        //not done yet...
-        if(game.lenInput() == game.peekWord().length) {
-            //wrong spelling
-            game.animateW();
-            setTimeout(next,3000);
+    else{
+        //show the new letter in the spelling
+        displayFlashcard(game.lenInput(), letter);
+        if(game.addInput(letter)) {
+            //correct
+            // displayMessage("That's right! Click to go to the next word.", function() {
+            //     next();
+            // });
+            game.animateC();
+            setTimeout(next, 3000);
+        }
+        else {
+            //not done yet...
+            if(game.lenInput() == game.peekWord().length) {
+                //wrong spelling
+                game.animateW();
+                setTimeout(next,3000);
+            }
         }
     }
 }
