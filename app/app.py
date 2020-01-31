@@ -20,6 +20,7 @@ def about():
 @my_app.route('/profile')
 def profile():
     return render_template("profile.html")
+
 """
 @my_app.route('/register')
 def register():

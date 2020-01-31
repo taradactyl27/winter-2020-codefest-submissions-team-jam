@@ -2,7 +2,7 @@
 
 # Running Flask
 - run "source env/bin/activate" to start virtual environment
-- in root project folder, run "pip install -r "requirements.text""
+- in root project folder, run "pip install -r "requirements.txt""
 - go to app folder
 - run "flask run"
 - if you get a flask app name error run "export FLASK_APP=app.py"
