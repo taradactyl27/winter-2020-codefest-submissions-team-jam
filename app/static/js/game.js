@@ -13,7 +13,7 @@ const PRACTICE = 0;
 function fetchWords() {
     window.setTimeout(function() {
         //in reality, this would come from the API in a callback
-        var data = ["car", "hello"];
+        var data = ["car", "hello","beauty","tiger"];
         game = new Review(data);
         displayFlashcard(game.peekWord().replace(/./g, "_"));
         console.log("Word is: ", game.peekWord());
@@ -152,6 +152,80 @@ class Review {
         this.setIsCorrect(correct);
         return correct;
     }
+
+    /**
+     * Animates the text green and bounces word to indicate it is correct
+      */
+    animateC(){
+        var textSpace = document.getElementById("card").contentDocument.getElementById("text");
+        textSpace.style.fill = "#00FF00";
+        var xforms = textSpace.getAttribute('transform');
+        var parts  = /translate\(\s*([^\s,)]+)[ ,]([^\s,)]+)/.exec(xforms);
+        var firstX = parts[1],
+        firstY = parts[2];
+        var final = parseInt(firstY);
+         //ending y point in translation to translate back from
+        let start = Date.now(); // remember start time
+        let timer = setInterval(function() {
+        // how much time passed from the start?
+        let timePassed = Date.now() - start;
+        if (timePassed >= 1000) {
+            clearInterval(timer); // finish the animation after 2 seconds
+        return;
+        }
+        switch (true){
+            case (timePassed <= 250):
+                textSpace.setAttribute('transform',"translate(" + firstX + "," + (final -= .25) + ")");
+                break;
+            case (timePassed > 250 && timePassed <= 500):
+                textSpace.setAttribute('transform',  "translate("+ firstX + "," + (final += .25) + ")");
+                break;
+            case (timePassed > 500 && timePassed <= 750 ):
+                textSpace.setAttribute('transform',"translate(" + firstX + "," + (final -= .25) + ")");
+                break;
+            case (timePassed > 750 && timePassed <= 1000):
+                textSpace.setAttribute('transform',  "translate("+ firstX + "," + (final += .25) + ")");
+                break;    
+        }
+        } , 10);
+    }
+     /**
+     * Animates the text green and bounces word to indicate it is correct
+     */
+    animateW(){
+        var textSpace = document.getElementById("card").contentDocument.getElementById("text");
+        textSpace.style.fill = "#FF0000";
+        var xforms = textSpace.getAttribute('transform');
+        var parts  = /translate\(\s*([^\s,)]+)[ ,]([^\s,)]+)/.exec(xforms);
+        var firstX = parts[1],
+        firstY = parts[2];
+        var final = parseInt(firstX);
+         //ending y point in translation to translate back from
+        let start = Date.now(); // remember start time
+        let timer = setInterval(function() {
+        // how much time passed from the start?
+        let timePassed = Date.now() - start;
+        if (timePassed >= 1000) {
+            clearInterval(timer); // finish the animation after 2 seconds
+        return;
+        }
+        switch (true){
+            case (timePassed <= 250):
+                textSpace.setAttribute('transform',"translate(" + (final -= .25) + "," + firstY + ")");
+                break;
+            case (timePassed > 250 && timePassed <= 500):
+                textSpace.setAttribute('transform',  "translate("+ (final += .25) + "," + firstY + ")");
+                break;
+            case (timePassed > 500 && timePassed <= 750 ):
+                textSpace.setAttribute('transform',"translate(" + (final -= .25) + "," + firstY + ")");
+                break;
+            case (timePassed > 750 && timePassed <= 1000):
+                textSpace.setAttribute('transform',  "translate("+ (final += .25) + "," + firstY + ")");
+                break;    
+        }
+        } , 10);
+    }
+
     /**
      * Same as above, but appends instead of replacing the input.
      */
@@ -251,8 +325,8 @@ var game;
  * words. The input will always be reset.
  */
 function next() {
-            console.log("word: " + game.word + " stage: " + game.stage);
-
+    console.log("word: " + game.word + " stage: " + game.stage);
+    document.getElementById("card").contentDocument.getElementById("text").style.fill="#000000";    
     game.nextWord();
     if(!game.done()) {
         game.setInput("");
@@ -276,15 +350,15 @@ function addLetter(obj) {
         // displayMessage("That's right! Click to go to the next word.", function() {
         //     next();
         // });
-        alert("That's right!");
-        next();
+        game.animateC();
+        setTimeout(next, 3000);
     }
     else {
         //not done yet...
         if(game.lenInput() == game.peekWord().length) {
             //wrong spelling
-            alert("You got it wrong");
-            next();
+            game.animateW();
+            setTimeout(next,3000);
         }
     }
 }
