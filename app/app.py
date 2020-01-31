@@ -14,6 +14,9 @@ my_app.secret_key = os.urandom(64)
 @my_app.route('/')
 def root():
     return render_template("index.html")
+@my_app.route('/about')
+def about():
+    return render_template("landing.html")
 @my_app.route('/profile')
 def profile():
     return render_template("profile.html")
