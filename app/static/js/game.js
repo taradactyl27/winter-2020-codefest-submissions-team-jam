@@ -13,7 +13,7 @@ const PRACTICE = 0;
 function fetchWords() {
     window.setTimeout(function() {
         //in reality, this would come from the API in a callback
-        var data = ["hello", "car", "apple", "music"];
+        var data = ["car", "hello"];
         game = new Review(data);
         displayFlashcard(game.peekWord().replace(/./g, "_"));
         console.log("Word is: ", game.peekWord());
@@ -130,7 +130,7 @@ class Review {
      * @return (string) the current word
      */
     peekWord() {
-        return this.stages[this.stage][this.word].word;
+        return this.stages[this.stage][this.word].word || "";
     }
     /**
      * Marks the current spelling of the current word as correct or incorrect.
@@ -168,7 +168,6 @@ class Review {
      * Returns true if the spelling of current word is correct, false if not.
      */
     checkSpelling() {
-        console.log(this.peekWord);
         return this.peekWord().toLowerCase() == this.input.toLowerCase();
     }
     spatialLearning() {
@@ -212,10 +211,11 @@ class Review {
      */
     nextWord() {
         this.word++;
+        console.log(this.word + "whaaat " + this.stages[this.stage].length);
         if(this.word == this.stages[this.stage].length) {
             this.stage++;
             this.word = 0;
-            if(this.stage == this.cycleStop) {
+            if(this.stage >= this.cycleStop) {
                 this.spatialLearning();
                 this.cycleStop++;
                 //advance to first stage that has words in it (nonempty)
@@ -235,7 +235,8 @@ class Review {
      * Returns true if every word was spelled correctly enough times, false otherwise.
      */
     done() {
-        return (this.stage == this.cycleStop) && (this.stages[LEARNED].length == this.words.length);
+        return this.stage == 1;
+        //return (this.stage == this.cycleStop) && (this.stages[LEARNED].length == this.words.length);
     }
 }
 
@@ -250,8 +251,10 @@ var game;
  * words. The input will always be reset.
  */
 function next() {
+            console.log("word: " + game.word + " stage: " + game.stage);
+
+    game.nextWord();
     if(!game.done()) {
-        game.nextWord();
         game.setInput("");
         displayFlashcard(game.peekWord().replace(/./g, "_"));
         console.log("Word is: ", game.peekWord());
