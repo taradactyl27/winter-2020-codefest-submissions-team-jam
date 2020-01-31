@@ -162,11 +162,9 @@ class Review {
     animateC(){
         var textSpace = document.getElementById("card").contentDocument.getElementById("text");
         textSpace.style.fill = "#00FF00";
-        var xforms = textSpace.getAttribute('transform');
-        var parts  = /translate\(\s*([^\s,)]+)[ ,]([^\s,)]+)/.exec(xforms);
-        var firstX = parts[1],
-        firstY = parts[2];
-        var final = parseInt(firstY);
+        var XString = textSpace.getAttribute('x');
+        var YString = textSpace.getAttribute('y');
+        var y = parseInt(YString.substring(0,YString.length-1))
          //ending y point in translation to translate back from
         let start = Date.now(); // remember start time
         let timer = setInterval(function() {
@@ -178,16 +176,20 @@ class Review {
         }
         switch (true){
             case (timePassed <= 250):
-                textSpace.setAttribute('transform',"translate(" + firstX + "," + (final -= .25) + ")");
+                textSpace.setAttribute('y', (y += .1)+"%");
+                textSpace.setAttribute('x', XString);
                 break;
             case (timePassed > 250 && timePassed <= 500):
-                textSpace.setAttribute('transform',  "translate("+ firstX + "," + (final += .25) + ")");
+                textSpace.setAttribute('y', (y -= .1)+"%");
+                textSpace.setAttribute('x', XString);
                 break;
             case (timePassed > 500 && timePassed <= 750 ):
-                textSpace.setAttribute('transform',"translate(" + firstX + "," + (final -= .25) + ")");
+                textSpace.setAttribute('y', (y += .1)+"%");
+                textSpace.setAttribute('x', XString);
                 break;
             case (timePassed > 750 && timePassed <= 1000):
-                textSpace.setAttribute('transform',  "translate("+ firstX + "," + (final += .25) + ")");
+                textSpace.setAttribute('y', (y -= .1)+"%");
+                textSpace.setAttribute('x', XString);
                 break;    
         }
         } , 10);
@@ -198,11 +200,9 @@ class Review {
     animateW(){
         var textSpace = document.getElementById("card").contentDocument.getElementById("text");
         textSpace.style.fill = "#FF0000";
-        var xforms = textSpace.getAttribute('transform');
-        var parts  = /translate\(\s*([^\s,)]+)[ ,]([^\s,)]+)/.exec(xforms);
-        var firstX = parts[1],
-        firstY = parts[2];
-        var final = parseInt(firstX);
+        var XString = textSpace.getAttribute('x');
+        var YString = textSpace.getAttribute('y');
+        var x = parseInt(XString.substring(0,XString.length-1))
          //ending y point in translation to translate back from
         let start = Date.now(); // remember start time
         let timer = setInterval(function() {
@@ -214,16 +214,20 @@ class Review {
         }
         switch (true){
             case (timePassed <= 250):
-                textSpace.setAttribute('transform',"translate(" + (final -= .25) + "," + firstY + ")");
+                textSpace.setAttribute('x', (x += .1)+"%");
+                textSpace.setAttribute('y', YString);
                 break;
             case (timePassed > 250 && timePassed <= 500):
-                textSpace.setAttribute('transform',  "translate("+ (final += .25) + "," + firstY + ")");
+                textSpace.setAttribute('x', (x -= .1)+"%");
+                textSpace.setAttribute('y', YString);
                 break;
             case (timePassed > 500 && timePassed <= 750 ):
-                textSpace.setAttribute('transform',"translate(" + (final -= .25) + "," + firstY + ")");
+                textSpace.setAttribute('x', (x += .1)+"%");
+                textSpace.setAttribute('y', YString);
                 break;
             case (timePassed > 750 && timePassed <= 1000):
-                textSpace.setAttribute('transform',  "translate("+ (final += .25) + "," + firstY + ")");
+                textSpace.setAttribute('x', (x -= .1)+"%");
+                textSpace.setAttribute('y', YString);
                 break;    
         }
         } , 10);
