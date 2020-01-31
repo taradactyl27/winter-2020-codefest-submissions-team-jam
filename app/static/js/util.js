@@ -84,6 +84,7 @@ function displayMessage(text, onClick) {
     var card = document.getElementById("card").contentDocument.getElementById("text");
     card.style.fontSize = "14px";
     card.style.fill = "black";
+    card.style.letterSpacing = "0px";
     card.textContent = text;
     card.removeEventListener("click", flashCardClick);
     flashCardClick = onClick;

@@ -348,6 +348,7 @@ var game;
 function next() {
     console.log("word: " + game.word + " stage: " + game.stage);
     document.getElementById("card").contentDocument.getElementById("text").style.fill="#000000";    
+    document.getElementById("card").contentDocument.getElementById("text").style.letterSpacing="25px"; 
     game.nextWord();
     if(!game.done()) {
         game.setInput("");
