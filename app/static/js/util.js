@@ -67,6 +67,7 @@ function makeSVG(tag, attributes, content) {
  */
 function displayFlashcard(text) {
     var card = document.getElementById("card").contentDocument.getElementById("text");
+    card.style.fontSize = "128px";
     if(arguments.length == 1) {
         card.textContent = text;
     } else {
@@ -74,17 +75,17 @@ function displayFlashcard(text) {
     }
 }
 
+var flashCardClick;
+
 /**
  * Meant to display big text popup covering the whole screen.
  */
 function displayMessage(text, onClick) {
-    var popup = $("#popup");
-    if(text == false) {
-        popup.css({display: "none"});
-    } else {
-        popup.off();
-        popup.on("click", onClick);
-        popup.html(text);
-        popup.css({display: "block"});
-    }
+    var card = document.getElementById("card").contentDocument.getElementById("text");
+    card.style.fontSize = "14px";
+    card.style.fill = "black";
+    card.textContent = text;
+    card.removeEventListener("click", flashCardClick);
+    flashCardClick = onClick;
+    card.addEventListener("click", onClick);
 }

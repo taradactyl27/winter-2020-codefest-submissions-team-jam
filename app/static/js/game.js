@@ -13,7 +13,7 @@ const PRACTICE = 0;
 function fetchWords() {
     window.setTimeout(function() {
         //in reality, this would come from the API in a callback
-        var data = ["car", "hello","beauty","tiger"];
+        var data = {"car": "a four-wheeled road vehicle to carry people, powered by an engine", "hello": "a greeting to start a conversation", "beauty": "a combination of shape, color and other details that make something or someone look nice", "tiger": "a big animal, related to cats, that hunts and lives alone in the forests of Asia. Has an orange fur coat with black stripes."};
         game = new Review(data);
         displayFlashcard(game.peekWord().replace(/./g, "_"));
         console.log("Word is: ", game.peekWord());
@@ -89,7 +89,8 @@ window.onload = setup;
 
 class Review {
     constructor(words) {
-        this.words = words;
+        this.words = Object.keys(words);
+        this.dictionary = words;
         //suffle the words
         for(let i = 0; i < this.words.length; i++) {
             let temp = this.words[i];
@@ -134,6 +135,13 @@ class Review {
      */
     peekWord() {
         return this.stages[this.stage][this.word].word || "";
+    }
+    /**
+     * Gets the definition of the current word
+     * @return (string) the definition
+     */
+    peekDefinition() {
+        return this.dictionary[this.peekWord()];
     }
     /**
      * Marks the current spelling of the current word as correct or incorrect.
@@ -195,7 +203,7 @@ class Review {
         } , 10);
     }
      /**
-     * Animates the text green and bounces word to indicate it is correct
+     * Animates the text green and bounces word to indicate it is wrong
      */
     animateW(){
         var textSpace = document.getElementById("card").contentDocument.getElementById("text");
@@ -365,11 +373,10 @@ function addLetter(obj) {
         displayFlashcard(game.lenInput(), letter);
         if(game.addInput(letter)) {
             //correct
-            // displayMessage("That's right! Click to go to the next word.", function() {
-            //     next();
-            // });
             game.animateC();
-            setTimeout(next, 3000);
+            setTimeout(function() {
+                displayMessage(game.peekWord() + ": " + game.peekDefinition() + " \n Click to spell next word", next);
+            }, 3000);
         }
         else {
             //not done yet...
